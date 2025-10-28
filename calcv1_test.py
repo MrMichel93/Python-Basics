@@ -1,4 +1,4 @@
-import unittest
+import pytest
 from unittest.mock import patch
 import importlib
 import calc_v1
@@ -7,45 +7,47 @@ importlib.reload(calc_v1)
 
 from calc_v1 import add, subtract, multiply, divide, remainder, exponent, program
 
-class TestCalcSolution1(unittest.TestCase):
-    
-    def test_add(self):
-        self.assertEqual(add(2, 3), 5)
-        self.assertEqual(add(-1, 1), 0)
-        self.assertEqual(add(-1, -1), -2)
-    
-    def test_subtract(self):
-        self.assertEqual(subtract(10, 5), 5)
-        self.assertEqual(subtract(-1, 1), -2)
-        self.assertEqual(subtract(-1, -1), 0)
-    
-    def test_multiply(self):
-        self.assertEqual(multiply(3, 7), 21)
-        self.assertEqual(multiply(-1, 1), -1)
-        self.assertEqual(multiply(-1, -1), 1)
-    
-    def test_divide(self):
-        self.assertEqual(divide(10, 2), 5)
-        self.assertEqual(divide(-1, 1), -1)
-        self.assertEqual(divide(-1, -1), 1)
-        with self.assertRaises(ZeroDivisionError):
-            divide(1, 0)
-    
-    def test_remainder(self):
-        self.assertEqual(remainder(10, 3), 1)
-        self.assertEqual(remainder(-1, 1), 0)
-        self.assertEqual(remainder(-1, -1), 0)
-    
-    def test_exponent(self):
-        self.assertEqual(exponent(2, 3), 8)
-        self.assertEqual(exponent(-1, 1), -1)
-        self.assertEqual(exponent(-1, -1), -1)
 
-    @patch("builtins.input", side_effect=["1", "5", "3"])  # Mock user input: choice=1, num1=5, num2=3
-    @patch("builtins.print")  # Mock print to capture output
-    def test_program_addition(self, mock_print, mock_input):
-        program()  # Run the program function
-        mock_print.assert_called_with(8)  # Since add(5,3) should return 8, assert this was printed
+def test_add():
+    assert add(2, 3) == 5
+    assert add(-1, 1) == 0
+    assert add(-1, -1) == -2
 
-if __name__ == '__main__':
-    unittest.main()
+
+def test_subtract():
+    assert subtract(10, 5) == 5
+    assert subtract(-1, 1) == -2
+    assert subtract(-1, -1) == 0
+
+
+def test_multiply():
+    assert multiply(3, 7) == 21
+    assert multiply(-1, 1) == -1
+    assert multiply(-1, -1) == 1
+
+
+def test_divide():
+    assert divide(10, 2) == 5
+    assert divide(-1, 1) == -1
+    assert divide(-1, -1) == 1
+    with pytest.raises(ZeroDivisionError):
+        divide(1, 0)
+
+
+def test_remainder():
+    assert remainder(10, 3) == 1
+    assert remainder(-1, 1) == 0
+    assert remainder(-1, -1) == 0
+
+
+def test_exponent():
+    assert exponent(2, 3) == 8
+    assert exponent(-1, 1) == -1
+    assert exponent(-1, -1) == -1
+
+
+@patch("builtins.input", side_effect=["1", "5", "3"])  # Mock user input: choice=1, num1=5, num2=3
+@patch("builtins.print")  # Mock print to capture output
+def test_program_addition(mock_print, mock_input):
+    program()  # Run the program function
+    mock_print.assert_called_with(8)  # Since add(5,3) should return 8, assert this was printed
